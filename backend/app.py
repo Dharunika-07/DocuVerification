@@ -56,24 +56,31 @@ print("✅ JWT initialized")
 mongo_client = None
 db = None
 
-mongodb_uri = os.getenv("MONGO_URI")
-print("MONGODB_URI from env:", mongodb_uri is not None)
+# Try both MONGODB_URI and MONGO_URI (for compatibility)
+print("DEBUG ENV VAR:", os.environ.get("MONGODB_URI"))
+mongodb_uri = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI")
+print(f"MONGODB_URI from env: {mongodb_uri is not None}")
 
 if mongodb_uri:
+    print(f"Attempting to connect to MongoDB...")
+    print(f"Connection string: {mongodb_uri[:30]}...{mongodb_uri[-20:]}")  # Show partial string for debugging
     try:
-        mongo_client = MongoClient(mongodb_uri, serverSelectionTimeoutMS=5000)
+        # Increase timeout to 30 seconds
+        mongo_client = MongoClient(
+            mongodb_uri, 
+            serverSelectionTimeoutMS=30000,
+            connectTimeoutMS=30000,
+            socketTimeoutMS=30000
+        )
+        # Force connection attempt
         mongo_client.server_info()
         db = mongo_client.get_database()
-        print("✅ MongoDB connected successfully")
+        print(f"✅ MongoDB connected successfully to database: {db.name}")
     except Exception as e:
-        print("❌ MongoDB connection error:", e)
+        print(f"❌ MongoDB connection error: {e}")
+        print(f"Full error: {traceback.format_exc()}")
 else:
-    print("❌ MONGODB_URI is not set")
-      
-
-    
-
-
+    print("❌ MONGODB_URI is not set in environment variables")
 
 # ------------------------------------------------------------
 # Create uploads directory
