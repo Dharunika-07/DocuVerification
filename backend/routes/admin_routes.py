@@ -12,7 +12,7 @@ admin_bp = Blueprint('admin', __name__, url_prefix='/api/admin')
 @jwt_required()
 def get_all_verifications():
     user_id = get_jwt_identity()
-    current_user = UserModel.find_by_id(mongo.db, user_id)
+    current_user = UserModel.find_by_id(user_id)
     
     if not current_user or current_user['role'] != 'admin':
         return ResponseUtils.error('Access denied', 403)
@@ -24,7 +24,7 @@ def get_all_verifications():
 @jwt_required()
 def get_all_documents():
     user_id = get_jwt_identity()
-    current_user = UserModel.find_by_id(mongo.db, user_id)
+    current_user = UserModel.find_by_id(user_id)
     
     if not current_user or current_user['role'] != 'admin':
         return ResponseUtils.error('Access denied', 403)
@@ -36,7 +36,7 @@ def get_all_documents():
 @jwt_required()
 def get_statistics():
     user_id = get_jwt_identity()
-    current_user = UserModel.find_by_id(mongo.db, user_id)
+    current_user = UserModel.find_by_id(user_id)
     
     if not current_user or current_user['role'] != 'admin':
         return ResponseUtils.error('Access denied', 403)

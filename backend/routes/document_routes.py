@@ -12,7 +12,7 @@ document_bp = Blueprint('document', __name__, url_prefix='/api/documents')
 @jwt_required()
 def upload_document():
     user_id = get_jwt_identity()
-    current_user = UserModel.find_by_id(mongo.db, user_id)
+    current_user = UserModel.find_by_id(user_id)
     
     if not current_user:
         return ResponseUtils.error('User not found', 404)
@@ -53,7 +53,7 @@ def upload_document():
 @jwt_required()
 def get_my_documents():
     user_id = get_jwt_identity()
-    current_user = UserModel.find_by_id(mongo.db, user_id)
+    current_user = UserModel.find_by_id(user_id)
     
     if not current_user:
         return ResponseUtils.error('User not found', 404)
@@ -64,7 +64,7 @@ def get_my_documents():
 @document_bp.route('/<document_id>', methods=['GET'])
 @jwt_required()
 def get_document(document_id):
-    document = DocumentModel.find_by_id(mongo.db, document_id)
+    document = DocumentModel.find_by_id(document_id)
     if not document:
         return ResponseUtils.error('Document not found', 404)
     return ResponseUtils.success(document)
