@@ -261,7 +261,14 @@ app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'dev-secret-key')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Enable CORS
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={
+    r"/*": {
+        "origins": [
+            "http://localhost:3000",
+            "https://verifychain-frontend.onrender.com"
+        ]
+    }
+})
 print("✅ CORS enabled")
 
 # Initialize JWT
