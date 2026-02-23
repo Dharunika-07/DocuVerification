@@ -133,9 +133,9 @@ class EmbeddingService:
             return 0.0
     
     @staticmethod
-    def find_duplicates(db, current_embedding, threshold=0.99):
+    def find_duplicates(current_embedding, threshold=0.99):
         from models.verification_model import VerificationModel
-        all_verifications = VerificationModel.find_duplicates(db, current_embedding)
+        all_verifications = VerificationModel.find_duplicates(current_embedding)
         
         duplicates = []
         for verification in all_verifications:
