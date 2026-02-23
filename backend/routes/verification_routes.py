@@ -216,3 +216,24 @@ def get_my_verifications():
     )
 
     return ResponseUtils.success(verifications)
+
+
+@verification_bp.route("/<verification_id>", methods=["GET"])
+@jwt_required()
+def get_verification(verification_id):
+    try:
+        verification = VerificationModel.find_by_id(verification_id)
+
+        if not verification:
+            return ResponseUtils.error("Verification not found", 404)
+
+        # Convert ObjectIds to string
+        verification["_id"] = str(verification["_id"])
+        verification["document_id"] = str(verification["document_id"])
+        verification["user_id"] = str(verification["user_id"])
+
+        return ResponseUtils.success(verification)
+
+    except Exception as e:
+        print("Error fetching verification:", e)
+        return ResponseUtils.error("Failed to fetch verification", 500)
