@@ -35,7 +35,7 @@ def upload_document():
     extracted_text = OCRService.extract_text(file_path)
     
     document_id = DocumentModel.create_document(
-        mongo.db,
+        
         str(current_user['_id']),
         filename,
         file_path,
@@ -58,7 +58,7 @@ def get_my_documents():
     if not current_user:
         return ResponseUtils.error('User not found', 404)
     
-    documents = DocumentModel.find_by_user(mongo.db, str(current_user['_id']))
+    documents = DocumentModel.find_by_user(str(current_user['_id']))
     return ResponseUtils.success(documents)
 
 @document_bp.route('/<document_id>', methods=['GET'])
